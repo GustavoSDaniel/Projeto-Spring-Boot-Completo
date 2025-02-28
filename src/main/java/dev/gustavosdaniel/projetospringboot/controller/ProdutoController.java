@@ -1,7 +1,9 @@
 package dev.gustavosdaniel.projetospringboot.controller;
 
+import dev.gustavosdaniel.projetospringboot.exception.RecursoNaoEncontradoException;
 import dev.gustavosdaniel.projetospringboot.model.Produto;
 import dev.gustavosdaniel.projetospringboot.service.ProdutoService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +25,9 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}") // PESQUISAR O PRODUTO PELO ID
-    public ResponseEntity<Produto> buscarProduto(@PathVariable Long id) { //ELE PUXA O VALOR DA VARIAVEL NESSE CASO OVALOR DO ID QUE SERIA O PRODUTO PESQUISADO
-        return produtoService.buscarPorId(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build()); //SE ACHAR O ID RESPONDE OK CASO CONTRARIO VAI DAR UM MENSAGEM DE NOTFOUND
+    public ResponseEntity<?> buscarProduto(@PathVariable Long id) { //ELE PUXA O VALOR DA VARIAVEL NESSE CASO OVALOR DO ID QUE SERIA O PRODUTO PESQUISADO, O ? INDICA UM VALOR GENERICO
+            Produto produto = produtoService.buscarPorId(id);
+           return ResponseEntity.ok(produto);
     }
 
     @PostMapping // criar um produto
